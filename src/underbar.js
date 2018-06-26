@@ -2,7 +2,8 @@
   'use strict';
 
   // testing 
-  
+  // this is another comment ok.
+
   window._ = {};
 
   // Returns whatever value is passed as the argument. This function doesn't
