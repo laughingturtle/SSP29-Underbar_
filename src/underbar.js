@@ -10,6 +10,7 @@
   // seem very useful, but remember it--if a function needs to provide an
   // iterator when the user does not pass one in, this will be handy.
   _.identity = function(val) {
+    return val;
   };
 
   /**
@@ -40,6 +41,12 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    if (n === 0) {
+      return [];
+    } else {
+    //  console.log(n);
+    return n === undefined ? array[array.length - 1] : array.slice(-n);
+    }
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -48,6 +55,17 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+   
+    if (Array.isArray(collection)){
+      for (var i =0; i < collection.length; i++){
+       // 1. *** iterator(value, key, collection)
+      }
+    } else {
+      for (var j in collection) {
+      // 2. *** iterator(value, key, collection)
+      }
+    }
+    
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -69,17 +87,36 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var arr = [];
+    for (var i =0; i < collection.length; i++){
+     // 3. **** if truth test then
+       arr.push(collection[i]);
+     // }
+    }
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
+      var arr = [];
+      for (var i =0; i < collection.length; i++){
+      // 4. if does not equal truth test then
+        arr.push(collection[i]);
+      }
+
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-  };
+    var duplicateFreeArr = [];
+    for(var i = 0; i < array.length; i++) {
+      if (!duplicateFreeArr.includes(array[i])) {
+        duplicateFreeArr.push(array[i]);
+      }
+    }
+    return duplicateFreeArr;
+  }; 
 
 
   // Return the results of applying an iterator to each element.
