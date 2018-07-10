@@ -513,7 +513,7 @@
 
       it('should continue to call iterator even if the iterator returns undefined', function() {
         var callCount = 0;
-        var returnFalsy = function(total, item) {
+        var returnFalsy = function(idonothing, item) {
           callCount++;
           if (callCount === 1) {
             return undefined;
