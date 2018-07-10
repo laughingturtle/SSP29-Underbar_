@@ -204,8 +204,11 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
 
-       _.each(collection, function(element){ 
-        if(accumulator === undefined){
+// what is this test asking me to fix?
+       _.each(collection, function(element, index){ 
+        // change accumulator undefined as it's not what i need to test. Need to chnage to test
+        // first run. 
+        if(accumulator === undefined && index === 0){
           accumulator = element;
         } else {
           accumulator = iterator(accumulator, element);
@@ -214,9 +217,16 @@
       return accumulator;
   };
 
-
-
-
+/*
+acc     un->1    1    un->2 
+element   1      1      2         
+index     0      1      2
+item(el)  -      1      -  
+total(ac) -      1      -
+callCount 0     0->1    1
+callback  0      √      x
+(how many times is iterator invoked)
+*/
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
@@ -230,37 +240,50 @@
     }, false);
   };
 
-
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+
+  // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+
+/*
+    if (!iterator){
+      iterator = _.identity;
+    } 
+*/
 
     if(collection.length < 1){
       return true;
     }
 
-      return _.reduce(collection, function(acc, element){
-          console.log("my element = ", element);
-          console.log("my acc = ", acc);
-          console.log("my iterator = ", iterator);
-          
+    return _.reduce(collection, function(acc, element){
+                    
           if(!acc){
             return false;
-          }
+          }          
 
           if(iterator(element)){
             return true;
           } 
           return false;
-      }, 1);
-    
+      }, true);    
   };
 
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
-  _.some = function(collection, iterator) {
+  _.some = function(coll, iterator) {
+
+   iterator = iterator || _.identity;
+
     // TIP: There's a very clever way to re-use every() here.
+      return !_.every(coll, function(element, index){
+        if (iterator(element)){
+          return false;
+        } else {
+          return true;
+        }
+      });
   };
 
 
