@@ -416,14 +416,19 @@ callback  0      √      x
 
     return function(){
       var args = JSON.stringify(arguments);
+
+      if (obj[args]){
+        return obj[args];
+      } else { 
      // console.log('my args = ', args);
 
-      for (var i = 0; i < arguments.length; i++){
-        if (!obj.hasOwnProperty(args)){
-          obj[i] = func.apply(null, arguments);
+        for (var i = 0; i < arguments.length; i++){
+          if (!obj.hasOwnProperty(args)){
+            obj[args] = func.apply(null, arguments);
+          }
+     //   console.log(obj[args]);
+        return obj[args];
         }
-      console.log(obj);
-      return obj;
       }
     }
 
