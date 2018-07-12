@@ -305,12 +305,63 @@ callback  0      √      x
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
+  
+  // objA = {a:2, b:3, c:6};
+  // objB = {a:5, e:56, f:89};  
+
+  
+  //_.extend(objA, objB); // (destination / source) // objA = {a:5, b:3, c:6, e:56, f:89} or objB = {a:2, b:3, c:6, e:56, f:89}
+
+/*
+  _.extend = function(obj1, obj2) {
+  //  loop through source obj2   
+  //  add obj2 keys and values to obj1
+  //  return destination obj1
+    if (JSON.stringify(obj1) === JSON.stringify({}) && JSON.stringify(obj2) === JSON.stringify({}) ){
+      return obj1;
+    }  
+
+    for (var key in obj2){
+       obj1[key] = obj2[key];
+    }
+
+    return obj1;
   };
+
+
+*/
+  _.extend = function(obj) {
+  //  loop through source obj2   
+  //  add obj2 keys and values to obj1
+  //  return destination obj1
+
+  for (var i = 1; i < arguments.length; i++){
+    for (var key in arguments[i]){
+       obj[key] = arguments[i][key];
+    }
+  }
+  
+  return obj;
+  };
+
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+
+    for (var i = 1; i < arguments.length; i++){
+      for (var key in arguments[i]){
+
+        // if argument i's key is the same string as the first argument key do nothing, else add the key 
+        // arguments[0]
+
+        if(!arguments[0].hasOwnProperty(key)){
+           obj[key] = arguments[i][key];
+        } 
+        // arguments[0].hasOwnProperty(key) ? null : obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
 
@@ -351,10 +402,39 @@ callback  0      √      x
   // same thing as once, but based on many sets of unique arguments.
   //
   // _.memoize should return a function that, when called, will check if it has
-  // already computed the result for the given argument and return that value
+  // already computed the result for the given argument and return the previously calculated value
   // instead if possible.
   _.memoize = function(func) {
+     //  
+    var obj = {};
+    // var args = JSON.stringify(arguments);
+ //   var args = [].slice.call(arguments);
+ //   var myArgs = args.slice(0);
+   
+//    console.log('my args = ', myArgs);
+//    console.log('my arguments = ', arguments);
+
+    return function(){
+      var args = JSON.stringify(arguments);
+     // console.log('my args = ', args);
+
+      for (var i = 0; i < arguments.length; i++){
+        if (!obj.hasOwnProperty(args)){
+          obj[i] = func.apply(null, arguments);
+        }
+      console.log(obj);
+      return obj;
+      }
+    }
+
+     // store result in obj
+     // if arguments exist already use previous result
+     // return obj 
+
   };
+
+
+
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -363,6 +443,25 @@ callback  0      √      x
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+
+//    var argz = Array.prototype.slice.call(arguments);
+//    console.log('my argz = ', argz);
+    
+    var args = [].slice.call(arguments);
+ //   var args1 = args.slice(0,1);
+
+    var myArgs = args.slice(2);
+
+  // var myArgs = args1.concat(args2)
+  // console.log('my args = ', myArgs);
+  // console.log('my args1 = ', args1);
+  // console.log('my args2 = ', args2);
+  
+  // review set time out // 
+    setTimeout(function(){
+        func.apply(null, myArgs);
+    }, wait);
+  
   };
 
 
@@ -377,6 +476,24 @@ callback  0      √      x
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArr = array.slice();
+
+      // Do the Durstenfeld shuffle
+      for (var i = newArr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = newArr[i];
+        newArr[i] = newArr[j];
+        newArr[j] = temp;
+    }
+    /*
+    get last in newArr array, place last into temp
+    last position in newArray = newArr random.
+    newArr random = temp (last position) 
+    newArr last is removed
+
+    */
+
+    return newArr;
   };
 
 
